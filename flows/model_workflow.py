@@ -9,6 +9,10 @@ import os
 # Enter the command below to run this Flow. 
 # pyflyte run --remote ./flows/model_workflow.py model_training_workflow
 
+# Set default Compute Environment and Hardware Tier for each task. C
+environment_name = "Credit Default Environment"
+hardware_tier_name = "Small"
+
 # Define Flow Artifacts to capture for each model training task
 sklearn_log_regArtifact = Artifact("scikit-learn Logistic Regression", MODEL)
 h2oArtifact = Artifact("H20 AutoML", MODEL)
@@ -28,6 +32,8 @@ def model_training_workflow():
         command="python flows/sklearn_log_reg_train.py",
         output_specs=[Output(name="model", type=sklearn_log_regArtifact.File(name="model.pkl"))],
         use_project_defaults_for_omitted=True,
+        environment_name=environment_name,
+        hardware_tier_name=hardware_tier_name,
         dataset_snapshots=[
             DatasetSnapshot(Name=os.environ['DOMINO_PROJECT_NAME'], Id=os.environ['DATASET_ID'], Version=1)
         ]
@@ -39,6 +45,8 @@ def model_training_workflow():
         command="python flows/h2o_model_train.py",
         output_specs=[Output(name="model", type=h2oArtifact.File(name="model.pkl"))],
         use_project_defaults_for_omitted=True,
+        environment_name=environment_name,
+        hardware_tier_name=hardware_tier_name,
         dataset_snapshots=[
             DatasetSnapshot(Name=os.environ['DOMINO_PROJECT_NAME'], Id=os.environ['DATASET_ID'], Version=1)
         ]
@@ -50,6 +58,8 @@ def model_training_workflow():
         command="python flows/sklearn_RF_train.py",
         output_specs=[Output(name="model", type=sklearn_rfArtifact.File(name="model.pkl"))],
         use_project_defaults_for_omitted=True,
+        environment_name=environment_name,
+        hardware_tier_name=hardware_tier_name,
         dataset_snapshots=[
             DatasetSnapshot(Name=os.environ['DOMINO_PROJECT_NAME'], Id=os.environ['DATASET_ID'], Version=1)
         ]
@@ -61,6 +71,8 @@ def model_training_workflow():
         command="python flows/xgb_model_train.py",
         output_specs=[Output(name="model", type=xgboostArtifact.File(name="model.pkl"))],
         use_project_defaults_for_omitted=True,
+        environment_name=environment_name,
+        hardware_tier_name=hardware_tier_name,
         dataset_snapshots=[
             DatasetSnapshot(Name=os.environ['DOMINO_PROJECT_NAME'], Id=os.environ['DATASET_ID'], Version=1)
         ]
