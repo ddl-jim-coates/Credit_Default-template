@@ -6,12 +6,20 @@ from flytekitplugins.domino.task import DatasetSnapshot
 from flytekitplugins.domino.artifact import Artifact, DATA, MODEL, REPORT
 import os
 
+# Set default Compute Environment and Hardware Tier for all tasks. 
+environment_name = "Credit Default Environment"
+hardware_tier_name = "Small"
+
+
+# Enter the name of your project's default dataset. 
+# Ensure you have taken a snapshot of that dataset in order for it to be mounted to your flow tasks.
+dataset_name="workshop_dev"
+snapshot_number=1
+
+
 # Enter the command below to run this Flow. 
 # pyflyte run --remote ./flows/model_workflow.py model_training_workflow
 
-# Set default Compute Environment and Hardware Tier for each task. C
-environment_name = "Credit Default Environment"
-hardware_tier_name = "Small"
 
 # Define Flow Artifacts to capture for each model training task
 sklearn_log_regArtifact = Artifact("scikit-learn Logistic Regression", MODEL)
@@ -35,7 +43,7 @@ def model_training_workflow():
         environment_name=environment_name,
         hardware_tier_name=hardware_tier_name,
         dataset_snapshots=[
-            DatasetSnapshot(Name=os.environ['DOMINO_PROJECT_NAME'], Id=os.environ['DATASET_ID'], Version=1)
+            DatasetSnapshot(Name=dataset_name, Version=snapshot_number)
         ]
     )
 
@@ -48,7 +56,7 @@ def model_training_workflow():
         environment_name=environment_name,
         hardware_tier_name=hardware_tier_name,
         dataset_snapshots=[
-            DatasetSnapshot(Name=os.environ['DOMINO_PROJECT_NAME'], Id=os.environ['DATASET_ID'], Version=1)
+            DatasetSnapshot(Name=dataset_name, Version=snapshot_number)
         ]
     )
 
@@ -61,7 +69,7 @@ def model_training_workflow():
         environment_name=environment_name,
         hardware_tier_name=hardware_tier_name,
         dataset_snapshots=[
-            DatasetSnapshot(Name=os.environ['DOMINO_PROJECT_NAME'], Id=os.environ['DATASET_ID'], Version=1)
+            DatasetSnapshot(Name=dataset_name, Version=snapshot_number)
         ]
     )
 
@@ -74,7 +82,7 @@ def model_training_workflow():
         environment_name=environment_name,
         hardware_tier_name=hardware_tier_name,
         dataset_snapshots=[
-            DatasetSnapshot(Name=os.environ['DOMINO_PROJECT_NAME'], Id=os.environ['DATASET_ID'], Version=1)
+            DatasetSnapshot(Name=dataset_name, Version=snapshot_number)
         ]
     )
 
