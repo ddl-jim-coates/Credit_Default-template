@@ -44,7 +44,7 @@ def create_visuals(model, param):
     plt.savefig('/mnt/artifacts/log_reg_precision_recall_C={}.png'), str(param)
 
     
-    mlflow.log_artifact('workflow/outputs/log_reg_ROC_Curve_C.png')
+    mlflow.log_artifact('/workflow/outputs/log_reg_ROC_Curve_C.png')
     mlflow.log_artifact('/mnt/artifacts/log_reg_confusion_matrix_C={}.png'), str(param)
     mlflow.log_artifact('/mnt/artifacts/log_reg_precision_recall_C={}.png'), str(param)  
 
