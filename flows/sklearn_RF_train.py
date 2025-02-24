@@ -81,6 +81,7 @@ print('Training model...')
 # Read in number of estimators parameter from Flow input
 named_input = "num_estimators"
 num_estimator_value = Path(f"/workflow/inputs/{named_input}").read_text()
+num_estimator_value = int(num_estimator_value)  # Convert to integer
 
 #n_estimators = np.random.choice([50, 100, 150])
 
