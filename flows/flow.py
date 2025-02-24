@@ -82,7 +82,8 @@ def model_training_flow(data_path: str):
     sklearn_rf_results = run_domino_job_task(
         flyte_task_name="Train Sklearn RF",
         command="flows/sklearn_RF_train.py",
-        inputs=[Input(name='credit_card_default', type=FlyteFile[TypeVar('csv')], value=load_data['credit_card_default'])],
+        inputs=[Input(name='credit_card_default', type=FlyteFile[TypeVar('csv')], value=load_data['credit_card_default']),
+                Input(name='num_estimators', type=int, value=100)],
         output_specs=[Output(name="model", type=sklearn_rfArtifact.File(name="model.pkl"))],
         use_project_defaults_for_omitted=True,
         environment_name=environment_name,
