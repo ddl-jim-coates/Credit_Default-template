@@ -18,7 +18,7 @@ snapshot_number=1
 
 
 # Enter the command below to run this Flow. 
-# pyflyte run --remote ./flows/flow_dev.py model_training_workflow
+# pyflyte run --remote ./flows/flow_dev.py model_training_flow --data_path /mnt/data/workshop_dev/credit_card_default.csv
 
 
 # Define Flow Artifacts to capture for each model training task
@@ -36,7 +36,7 @@ def model_training_flow(data_path: str):
     """
 
     # Load csv from Dataset to Flows blob
-    sklearn_log_reg_results = run_domino_job_task(
+    load_data = run_domino_job_task(
         flyte_task_name="Load Data",
         command="flows/load_data.py",
         inputs=[Input(name='data_path', type=str, value=data_path)],
@@ -47,6 +47,17 @@ def model_training_flow(data_path: str):
         dataset_snapshots=[
             DatasetSnapshot(Name=dataset_name, Version=snapshot_number)
         ]
+    )
+
+    # Launch sklearn logistic regression training
+    sklearn_log_reg_results = run_domino_job_task(
+        flyte_task_name="Train Sklearn LogReg",
+        command="flows/sklearn_log_reg_train.py",
+        inputs=[Input(name='credit_card_default', type=FlyteFile[TypeVar('csv')], value=load_data['credit_card_default'])],
+        output_specs=[Output(name="model", type=sklearn_log_regArtifact.File(name="model.pkl"))],
+        use_project_defaults_for_omitted=True,
+        environment_name=environment_name,
+        hardware_tier_name=hardware_tier_name
     )
 
 
