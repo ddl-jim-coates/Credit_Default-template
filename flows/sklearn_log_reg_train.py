@@ -50,7 +50,7 @@ def create_visuals(model, param):
 
 #read in data then split into train and test
  
-path = str('/workflow/inputs/credit_card_default.csv')
+path = str('/workflow/inputs/credit_card_default')
 df = pd.read_csv(path)
 print('Read in {} rows of data'.format(df.shape[0]))
   
