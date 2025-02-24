@@ -46,9 +46,7 @@ def model_training_flow(data_path: str):
         hardware_tier_name=hardware_tier_name,
         dataset_snapshots=[
             DatasetSnapshot(Name=dataset_name, Version=snapshot_number)
-        ],
-        cache=True,
-        cache_version="1.0"
+        ]
     )
 
     # Launch sklearn logistic regression training
