@@ -18,7 +18,7 @@ snapshot_number=1
 
 
 # Enter the command below to run this Flow. 
-# pyflyte run --remote ./flows/flow_dev.py model_training_flow --data_path /mnt/data/workshop_dev/credit_card_default.csv
+# pyflyte run --remote ./flows/flow.py model_training_flow --data_path /mnt/data/workshop_dev/credit_card_default.csv
 
 
 # Define Flow Artifacts to capture for each model training task
@@ -56,7 +56,14 @@ def model_training_flow(data_path: str):
         flyte_task_name="Train Sklearn LogReg",
         command="flows/sklearn_log_reg_train.py",
         inputs=[Input(name='credit_card_default', type=FlyteFile[TypeVar('csv')], value=load_data['credit_card_default'])],
-        output_specs=[Output(name="model", type=sklearn_log_regArtifact.File(name="model.pkl"))],
+        output_specs=[Output(name="model", type=sklearn_log_regArtifact.File(name="model.pkl")),
+                      Output(name="log_reg_ROC_Curve_C", type=FlyteFile[TypeVar('png')]),
+                      Output(name="log_reg_confusion_matrix_C", type=FlyteFile[TypeVar('png')]),
+                      Output(name="log_reg_precision_recall_C", type=FlyteFile[TypeVar('png')]),
+                      Output(name="log_reg_ROC_Curve", type=FlyteFile[TypeVar('png')]),
+                      Output(name="log_reg_confusion_matrix", type=FlyteFile[TypeVar('png')]),
+                      Output(name="log_reg_precision_recall", type=FlyteFile[TypeVar('png')]),
+                      Output(name="log_reg_confusion_matrix", type=FlyteFile[TypeVar('png')])],
         use_project_defaults_for_omitted=True,
         environment_name=environment_name,
         hardware_tier_name=hardware_tier_name
