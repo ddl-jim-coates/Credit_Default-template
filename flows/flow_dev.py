@@ -65,9 +65,31 @@ def model_training_flow(data_path: str):
     # Launch H2O model training
     h2o_results = run_domino_job_task(
         flyte_task_name="Train H2O Model",
-        command="python flows/h2o_model_train.py",
+        command="flows/h2o_model_train.py",
         inputs=[Input(name='credit_card_default', type=FlyteFile[TypeVar('csv')], value=load_data['credit_card_default'])],
         output_specs=[Output(name="model", type=h2oArtifact.File(name="model.pkl"))],
+        use_project_defaults_for_omitted=True,
+        environment_name=environment_name,
+        hardware_tier_name=hardware_tier_name,
+    )
+
+    # Launch sklearn random forest training
+    sklearn_rf_results = run_domino_job_task(
+        flyte_task_name="Train Sklearn RF",
+        command="flows/sklearn_RF_train.py",
+        inputs=[Input(name='credit_card_default', type=FlyteFile[TypeVar('csv')], value=load_data['credit_card_default'])],
+        output_specs=[Output(name="model", type=sklearn_rfArtifact.File(name="model.pkl"))],
+        use_project_defaults_for_omitted=True,
+        environment_name=environment_name,
+        hardware_tier_name=hardware_tier_name,
+    )
+
+    # Launch XGBoost model training
+    xgboost_results = run_domino_job_task(
+        flyte_task_name="Train XGBoost",
+        command="flows/xgb_model_train.py",
+        inputs=[Input(name='credit_card_default', type=FlyteFile[TypeVar('csv')], value=load_data['credit_card_default'])],
+        output_specs=[Output(name="model", type=xgboostArtifact.File(name="model.pkl"))],
         use_project_defaults_for_omitted=True,
         environment_name=environment_name,
         hardware_tier_name=hardware_tier_name,
