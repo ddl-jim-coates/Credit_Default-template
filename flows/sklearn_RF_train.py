@@ -79,18 +79,18 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_
 print('Training model...')
 
 # Read in number of estimators parameter from Flow input
-named_input = "num_estimators"
-num_estimator_value = Path(f"/workflow/inputs/{named_input}").read_text().strip()
-num_estimator_value = int(num_estimator_value)  # Convert to integer
+#named_input = "num_estimators"
+#num_estimator_value = Path(f"/workflow/inputs/{named_input}").read_text().strip()
+#num_estimator_value = int(num_estimator_value)  # Convert to integer
 
-#n_estimators = np.random.choice([50, 100, 150])
+n_estimators = np.random.choice([50, 100, 150])
 
 # Shuffle parameter for Experiment Tracker
 min_samples_leaf = np.random.choice([1, 2, 5])
 
 rf = RandomForestClassifier(max_depth=3,
                             min_samples_leaf=min_samples_leaf,
-                            n_estimators=num_estimator_value)
+                            n_estimators=n_estimators)
 rf.fit(X_train, y_train)
  
 #Predict test set
