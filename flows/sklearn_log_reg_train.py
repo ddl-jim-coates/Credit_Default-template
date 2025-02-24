@@ -34,19 +34,19 @@ def create_visuals(model, param):
 
     cm_display = ConfusionMatrixDisplay(cm).plot()
 
-    plt.savefig('/mnt/artifacts/log_reg_confusion_matrix_C={}.png'), str(param)
+    plt.savefig('/workflow/outputs/log_reg_confusion_matrix_C.png')
 
     prec, recall, _ = precision_recall_curve(y_test, y_pred,
                                              pos_label=log_reg.classes_[1])
 
     pr_display = PrecisionRecallDisplay(precision=prec, recall=recall).plot()
 
-    plt.savefig('/mnt/artifacts/log_reg_precision_recall_C={}.png'), str(param)
+    plt.savefig('/workflow/outputs/log_reg_precision_recall_C.png')
 
     
     mlflow.log_artifact('/workflow/outputs/log_reg_ROC_Curve_C.png')
-    mlflow.log_artifact('/mnt/artifacts/log_reg_confusion_matrix_C={}.png'), str(param)
-    mlflow.log_artifact('/mnt/artifacts/log_reg_precision_recall_C={}.png'), str(param)  
+    mlflow.log_artifact('/workflow/outputs/log_reg_confusion_matrix_C.png')
+    mlflow.log_artifact('/workflow/outputs/log_reg_precision_recall_C.png')
 
 #read in data then split into train and test
  
@@ -108,28 +108,28 @@ print('Creating visualizations...')
 roc_curve_display = RocCurveDisplay.from_estimator(log_reg, X_test, y_test)
 roc_curve_display.plot()
 fig = roc_curve_display.figure_
-plt.savefig('/mnt/artifacts/log_reg_ROC_Curve.png')
+plt.savefig('/workflow/outputs/log_reg_ROC_Curve.png')
 
 y_pred = log_reg.predict(X_test)
 cm = confusion_matrix(y_test, y_pred)
 
 cm_display = ConfusionMatrixDisplay(cm).plot()
 
-plt.savefig('/mnt/artifacts/log_reg_confusion_matrix.png')
+plt.savefig('/workflow/outputs/log_reg_confusion_matrix.png')
 
 prec, recall, _ = precision_recall_curve(y_test, y_pred,
                                          pos_label=log_reg.classes_[1])
 
 pr_display = PrecisionRecallDisplay(precision=prec, recall=recall).plot()
 
-plt.savefig('/mnt/artifacts/log_reg_precision_recall.png')
+plt.savefig('/workflow/outputs/log_reg_precision_recall.png')
 
 #Saving trained model to serialized pickle object 
  
 import pickle 
  
 # save best model
-file = '/mnt/code/models/sklearn_logreg.pkl'
+file = '/workflow/outputs/sklearn_logreg.pkl'
 pickle.dump(log_reg, open(file, 'wb'))
 
 
@@ -210,10 +210,10 @@ with mlflow.start_run(run_name=run_name) as parent_run:
             create_visuals(log_reg, c)
             
     # Model Artifacts
-    mlflow.log_artifact('/mnt/artifacts/log_reg_ROC_Curve.png')
-    mlflow.log_artifact('/mnt/artifacts/log_reg_confusion_matrix.png')
-    mlflow.log_artifact('/mnt/artifacts/log_reg_precision_recall.png')
-    mlflow.log_artifact('/mnt/code/models/sklearn_logreg.pkl')
+    mlflow.log_artifact('/workflow/outputs/log_reg_ROC_Curve.png')
+    mlflow.log_artifact('/workflow/outputs/log_reg_confusion_matrix.png')
+    mlflow.log_artifact('/workflow/outputs/log_reg_precision_recall.png')
+    mlflow.log_artifact('/workflow/outputs/sklearn_logreg.pkl')
 
     # Log Model in the Model Registry
     print('Logging logistic regression model to Experiment Tracker')
