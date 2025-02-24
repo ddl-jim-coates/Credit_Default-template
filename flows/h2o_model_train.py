@@ -24,7 +24,7 @@ n = 70
  
 #read in data then split into train and test
  
-path = str('/mnt/data/{}/credit_card_default.csv'.format(os.environ.get('DOMINO_PROJECT_NAME')))
+path = str('/workflow/inputs/credit_card_default')
 data = pd.read_csv(path)
 print('Read in {} rows of data'.format(data.shape[0]))
   

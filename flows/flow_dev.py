@@ -46,7 +46,9 @@ def model_training_flow(data_path: str):
         hardware_tier_name=hardware_tier_name,
         dataset_snapshots=[
             DatasetSnapshot(Name=dataset_name, Version=snapshot_number)
-        ]
+        ],
+        cache=True,
+        cache_version="1.0"
     )
 
     # Launch sklearn logistic regression training
@@ -58,6 +60,17 @@ def model_training_flow(data_path: str):
         use_project_defaults_for_omitted=True,
         environment_name=environment_name,
         hardware_tier_name=hardware_tier_name
+    )
+
+    # Launch H2O model training
+    h2o_results = run_domino_job_task(
+        flyte_task_name="Train H2O Model",
+        command="python flows/h2o_model_train.py",
+        inputs=[Input(name='credit_card_default', type=FlyteFile[TypeVar('csv')], value=load_data['credit_card_default'])],
+        output_specs=[Output(name="model", type=h2oArtifact.File(name="model.pkl"))],
+        use_project_defaults_for_omitted=True,
+        environment_name=environment_name,
+        hardware_tier_name=hardware_tier_name,
     )
 
 
