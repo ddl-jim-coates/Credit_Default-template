@@ -27,7 +27,7 @@ def create_visuals(model, param):
     roc_curve_display = RocCurveDisplay.from_estimator(model, X_test, y_test)
     roc_curve_display.plot()
     fig = roc_curve_display.figure_
-    plt.savefig('/workflow/outputs/log_reg_ROC_Curve_C={}.png'), str(param)
+    plt.savefig('/workflow/outputs/log_reg_ROC_Curve_C.png')
 
     y_pred = log_reg.predict(X_test)
     cm = confusion_matrix(y_test, y_pred)
@@ -44,7 +44,7 @@ def create_visuals(model, param):
     plt.savefig('/mnt/artifacts/log_reg_precision_recall_C={}.png'), str(param)
 
     
-    mlflow.log_artifact('workflow/outputs/log_reg_ROC_Curve_C={}.png'), str(param)
+    mlflow.log_artifact('workflow/outputs/log_reg_ROC_Curve_C.png')
     mlflow.log_artifact('/mnt/artifacts/log_reg_confusion_matrix_C={}.png'), str(param)
     mlflow.log_artifact('/mnt/artifacts/log_reg_precision_recall_C={}.png'), str(param)  
 
