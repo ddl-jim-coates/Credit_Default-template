@@ -43,11 +43,11 @@ def create_visuals(model, param):
 
     pr_display = PrecisionRecallDisplay(precision=prec, recall=recall).plot()
 
-    plt.savefig('/workflow/outputs/rf_precision_recall_n_estimators={}.png'), str(param)
+    plt.savefig('/workflow/outputs/rf_precision_recall_n_estimators.png'), str(param)
     
-    mlflow.log_artifact('/workflow/outputs/rf_ROC_Curve_n_estimators={}.png'), str(param)
-    mlflow.log_artifact('/workflow/outputs/rf_confusion_matrix_n_estimators={}.png'), str(param)
-    mlflow.log_artifact('/workflow/outputs/rf_precision_recall_n_estimators={}.png'), str(param)    
+    mlflow.log_artifact('/workflow/outputs/rf_ROC_Curve_n_estimators.png'), str(param)
+    mlflow.log_artifact('/workflow/outputs/rf_confusion_matrix_n_estimators.png'), str(param)
+    mlflow.log_artifact('/workflow/outputs/rf_precision_recall_n_estimators.png'), str(param)    
 
 # read in data then split into train and test
  
