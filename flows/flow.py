@@ -29,6 +29,8 @@ h2oArtifact = Artifact("H20 AutoML", MODEL)
 h2oArtifact_charts = Artifact("H20 AutoML Charts", REPORT)
 
 sklearn_rfArtifact = Artifact("scikit-learn Random Forest", MODEL)
+sklearn_rfArtifact_charts = Artifact("scikit-learn Random Forest Charts", REPORT)
+
 
 xgboostArtifact = Artifact("XGBoost", MODEL)
 
@@ -81,8 +83,7 @@ def model_training_flow(data_path: str):
         inputs=[Input(name='credit_card_default', type=FlyteFile[TypeVar('csv')], value=load_data['credit_card_default'])],
         output_specs=[Output(name="model", type=h2oArtifact.File(name="model.pkl")),
                       Output(name="h2o_PI_plot", type=h2oArtifact_charts.File(name="h2o_PI_plot.png")),
-                      Output(name="1_h2o_SHAP_Summary", type=h2oArtifact_charts.File(name="1_h2o_SHAP_Summary.png"))
-                      ],
+                      Output(name="h2o_SHAP_Summary", type=h2oArtifact_charts.File(name="h2o_SHAP_Summary.png"))],
         use_project_defaults_for_omitted=True,
         environment_name=environment_name,
         hardware_tier_name=hardware_tier_name,
@@ -94,7 +95,13 @@ def model_training_flow(data_path: str):
         command="flows/sklearn_RF_train.py",
         inputs=[Input(name='credit_card_default', type=FlyteFile[TypeVar('csv')], value=load_data['credit_card_default']),
                 Input(name='num_estimators', type=int, value=100)],
-        output_specs=[Output(name="model", type=sklearn_rfArtifact.File(name="model.pkl"))],
+        output_specs=[Output(name="model", type=sklearn_rfArtifact.File(name="model.pkl")),
+                      Output(name="rf_ROC_Curve_n_estimators", type=sklearn_rfArtifact_charts.File(name="rf_ROC_Curve_n_estimators.png")),
+                      Output(name="rf_confusion_matrix_n_estimators", type=sklearn_rfArtifact_charts.File(name="rf_confusion_matrix_n_estimators.png")),
+                      Output(name="rf_precision_recall_n_estimators", type=sklearn_rfArtifact_charts.File(name="rf_precision_recall_n_estimators.png")),
+                      Output(name="rf_ROC_Curve", type=sklearn_rfArtifact_charts.File(name="rf_ROC_Curve.png")),
+                      Output(name="rf_confusion_matrix", type=sklearn_rfArtifact_charts.File(name="rf_confusion_matrix.png")),
+                      Output(name="rf_precision_recall", type=sklearn_rfArtifact_charts.File(name="rf_precision_recall.png"))],
         use_project_defaults_for_omitted=True,
         environment_name=environment_name,
         hardware_tier_name=hardware_tier_name,

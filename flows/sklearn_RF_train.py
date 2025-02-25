@@ -29,25 +29,25 @@ def create_visuals(model, param):
     roc_curve_display = RocCurveDisplay.from_estimator(rf, X_test, y_test)
     roc_curve_display.plot()
     fig = roc_curve_display.figure_
-    plt.savefig('/mnt/artifacts/rf_ROC_Curve_n_estimators={}.png'), str(param)
+    plt.savefig('/workflow/outputs/rf_ROC_Curve_n_estimators.png'), str(param)
 
     y_pred = rf.predict(X_test)
     cm = confusion_matrix(y_test, y_pred)
 
     cm_display = ConfusionMatrixDisplay(cm).plot()
 
-    plt.savefig('/mnt/artifacts/rf_confusion_matrix_n_estimators={}.png'), str(param)
+    plt.savefig('/workflow/outputs/rf_confusion_matrix_n_estimators.png'), str(param)
 
     prec, recall, _ = precision_recall_curve(y_test, y_pred,
                                              pos_label=rf.classes_[1])
 
     pr_display = PrecisionRecallDisplay(precision=prec, recall=recall).plot()
 
-    plt.savefig('/mnt/artifacts/rf_precision_recall_n_estimators={}.png'), str(param)
+    plt.savefig('/workflow/outputs/rf_precision_recall_n_estimators={}.png'), str(param)
     
-    mlflow.log_artifact('/mnt/artifacts/rf_ROC_Curve_n_estimators={}.png'), str(param)
-    mlflow.log_artifact('/mnt/artifacts/rf_confusion_matrix_n_estimators={}.png'), str(param)
-    mlflow.log_artifact('/mnt/artifacts/rf_precision_recall_n_estimators={}.png'), str(param)    
+    mlflow.log_artifact('/workflow/outputs/rf_ROC_Curve_n_estimators={}.png'), str(param)
+    mlflow.log_artifact('/workflow/outputs/rf_confusion_matrix_n_estimators={}.png'), str(param)
+    mlflow.log_artifact('/workflow/outputs/rf_precision_recall_n_estimators={}.png'), str(param)    
 
 # read in data then split into train and test
  
@@ -121,28 +121,28 @@ print('Creating visualizations...')
 roc_curve_display = RocCurveDisplay.from_estimator(rf, X_test, y_test)
 roc_curve_display.plot()
 fig = roc_curve_display.figure_
-plt.savefig('/mnt/artifacts/rf_ROC_Curve.png')
+plt.savefig('/workflow/outputs/rf_ROC_Curve.png')
 
 y_pred = rf.predict(X_test)
 cm = confusion_matrix(y_test, y_pred)
 
 cm_display = ConfusionMatrixDisplay(cm).plot()
 
-plt.savefig('/mnt/artifacts/rf_confusion_matrix.png')
+plt.savefig('/workflow/outputs/rf_confusion_matrix.png')
 
 prec, recall, _ = precision_recall_curve(y_test, y_pred,
                                          pos_label=rf.classes_[1])
 
 pr_display = PrecisionRecallDisplay(precision=prec, recall=recall).plot()
 
-plt.savefig('/mnt/artifacts/rf_precision_recall.png')
+plt.savefig('/workflow/outputs/rf_precision_recall.png')
 
 # Saving trained model to serialized pickle object 
  
 import pickle 
  
 # Save initial model
-file = '/mnt/code/models/sklearn_rf.pkl'
+file = '/workflow/outputs/sklearn_rf.pkl'
 pickle.dump(rf, open(file, 'wb'))
 
 ### Log results in Experiment Tracker ###
@@ -222,10 +222,10 @@ with mlflow.start_run(run_name=run_name) as run:
             create_visuals(rf, max_depth)
 
     # Model Artifacts for parent run
-    mlflow.log_artifact('/mnt/artifacts/rf_ROC_Curve.png')
-    mlflow.log_artifact('/mnt/artifacts/rf_confusion_matrix.png')
-    mlflow.log_artifact('/mnt/artifacts/rf_precision_recall.png')
-    mlflow.log_artifact('/mnt/code/models/sklearn_rf.pkl')
+    mlflow.log_artifact('/workflow/outputs/rf_ROC_Curve.png')
+    mlflow.log_artifact('/workflow/outputs/rf_confusion_matrix.png')
+    mlflow.log_artifact('/workflow/outputs/rf_precision_recall.png')
+    mlflow.log_artifact('/workflow/outputs/sklearn_rf.pkl')
 
     # Log Model in the Model Registry
     print('Logging Random Forest model to Experiment Tracker')
