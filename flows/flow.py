@@ -33,6 +33,8 @@ sklearn_rfArtifact_charts = Artifact("scikit-learn Random Forest Charts", REPORT
 
 
 xgboostArtifact = Artifact("XGBoost", MODEL)
+xgboostArtifact_charts = Artifact("XGBoost Charts", REPORT)
+
 
 
 @workflow
@@ -112,7 +114,13 @@ def model_training_flow(data_path: str):
         flyte_task_name="Train XGBoost",
         command="flows/xgb_model_train.py",
         inputs=[Input(name='credit_card_default', type=FlyteFile[TypeVar('csv')], value=load_data['credit_card_default'])],
-        output_specs=[Output(name="model", type=xgboostArtifact.File(name="model.pkl"))],
+        output_specs=[Output(name="model", type=xgboostArtifact.File(name="model.pkl")),
+                      Output(name="xgb_ROC_Curve_max_depth", type=xgboostArtifact_charts.File(name="xgb_ROC_Curve_max_depth.png")),
+                      Output(name="xgb_confusion_matrix_max_depth", type=xgboostArtifact_charts.File(name="xgb_confusion_matrix_max_depth.png")),
+                      Output(name="xgb_precision_recall_max_depth", type=xgboostArtifact_charts.File(name="xgb_precision_recall_max_depth.png")),
+                      Output(name="xgb_ROC_Curve", type=xgboostArtifact_charts.File(name="xgb_ROC_Curve.png")),
+                      Output(name="xgb_confusion_matrix", type=xgboostArtifact_charts.File(name="xgb_confusion_matrix.png")),
+                      Output(name="xgb_precision_recall", type=xgboostArtifact_charts.File(name="xgb_precision_recall.png"))],
         use_project_defaults_for_omitted=True,
         environment_name=environment_name,
         hardware_tier_name=hardware_tier_name,

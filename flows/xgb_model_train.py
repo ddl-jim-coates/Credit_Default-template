@@ -28,25 +28,25 @@ def create_visuals(model, param):
     # RocCurveDisplay.from_estimator(model, X_test, y_test, name='XGBoost AUC Curve')
     roc_curve_display = RocCurveDisplay.from_estimator(xgb_clf, X_test, y_test)
     fig = roc_curve_display.figure_
-    plt.savefig('/mnt/artifacts/xgb_ROC_Curve_max_depth={}.png'), str(param)
+    plt.savefig('/workflow/outputs/xgb_ROC_Curve_max_depth.png'), str(param)
 
     y_pred = model.predict(X_test)
     cm = confusion_matrix(y_test, y_pred)
 
     cm_display = ConfusionMatrixDisplay(cm).plot()
 
-    plt.savefig('/mnt/artifacts/xgb_confusion_matrix_max_depth={}.png'), str(param)
+    plt.savefig('/workflow/outputs/xgb_confusion_matrix_max_depth.png'), str(param)
 
     prec, recall, _ = precision_recall_curve(y_test, y_pred,
                                              pos_label=model.classes_[1])
 
     pr_display = PrecisionRecallDisplay(precision=prec, recall=recall).plot()
 
-    plt.savefig('/mnt/artifacts/xgb_precision_recall_max_depth={}.png'), str(param)
+    plt.savefig('/workflow/outputs/xgb_precision_recall_max_depth.png'), str(param)
     
-    mlflow.log_artifact('/mnt/artifacts/xgb_ROC_Curve_max_depth={}.png'), str(param)
-    mlflow.log_artifact('/mnt/artifacts/xgb_confusion_matrix_max_depth={}.png'), str(param)
-    mlflow.log_artifact('/mnt/artifacts/xgb_precision_recall_max_depth={}.png'), str(param)    
+    mlflow.log_artifact('/workflow/outputs/xgb_ROC_Curve_max_depth.png'), str(param)
+    mlflow.log_artifact('/workflow/outputs/xgb_confusion_matrix_max_depth.png'), str(param)
+    mlflow.log_artifact('/workflow/outputs/xgb_precision_recall_max_depth.png'), str(param)    
     
     # Read in data then split into train and test
 path = str('/workflow/inputs/credit_card_default')
@@ -114,25 +114,25 @@ print('Creating visualizations...')
 # RocCurveDisplay.from_estimator(xgb_clf, X_test, y_test, name='XGBoost AUC Curve')
 roc_curve_display = RocCurveDisplay.from_estimator(xgb_clf, X_test, y_test)
 fig = roc_curve_display.figure_
-plt.savefig('/mnt/artifacts/xgb_ROC_Curve.png')
+plt.savefig('/workflow/outputs/xgb_ROC_Curve.png')
 
 y_pred = xgb_clf.predict(X_test)
 cm = confusion_matrix(y_test, y_pred)
 
 cm_display = ConfusionMatrixDisplay(cm).plot()
 
-plt.savefig('/mnt/artifacts/xgb_confusion_matrix.png')
+plt.savefig('/workflow/outputs/xgb_confusion_matrix.png')
 
 prec, recall, _ = precision_recall_curve(y_test, y_pred,
                                          pos_label=xgb_clf.classes_[1])
 
 pr_display = PrecisionRecallDisplay(precision=prec, recall=recall).plot()
 
-plt.savefig('/mnt/artifacts/xgb_precision_recall.png')
+plt.savefig('/workflow/outputs/xgb_precision_recall.png')
 
 # Same trained model to Project File System
 
-file = '/mnt/code/models/xgb_clf.pkl'
+file = '/workflow/outputs/xgb_clf.pkl'
 pickle.dump(xgb_clf, open(file, 'wb'))
 
 ### Log results in Experiment Tracker ###
@@ -204,10 +204,10 @@ with mlflow.start_run(run_name=run_name) as parent_run:
             create_visuals(xgb_clf, max_depth)
             
     # Model Artifacts
-    mlflow.log_artifact('/mnt/artifacts/xgb_ROC_Curve.png')
-    mlflow.log_artifact('/mnt/artifacts/xgb_confusion_matrix.png')
-    mlflow.log_artifact('/mnt/artifacts/xgb_precision_recall.png')
-    mlflow.log_artifact('/mnt/code/models/xgb_clf.pkl')
+    mlflow.log_artifact('/workflow/outputs/xgb_ROC_Curve.png')
+    mlflow.log_artifact('/workflow/outputs/xgb_confusion_matrix.png')
+    mlflow.log_artifact('/workflow/outputs/xgb_precision_recall.png')
+    mlflow.log_artifact('/workflow/outputs/xgb_clf.pkl')
 
     # Log Model in the Model Registry
     print('Logging XGBoost model to Experiment Tracker')
