@@ -100,7 +100,7 @@ PI_plot.savefig('/workflow/outputs/h2o_PI_plot.png')
 
 # SHAP Summary Plot
 shap_plot = best_model.shap_summary_plot(hTest).figure()
-shap_plot.savefig('/workflow/outputs/1_h2o_SHAP_Summary.png')
+shap_plot.savefig('/workflow/outputs/h2o_SHAP_Summary.png')
 
 #Saving trained model to serialized pickle object 
 aml_path = h2o.save_model(best_model, path ='/mnt/code/models')
@@ -147,7 +147,7 @@ with mlflow.start_run(run_name=run_name) as run:
 
     # Top Model Artifacts
     mlflow.log_artifact('/workflow/outputs/h2o_PI_plot.png')
-    mlflow.log_artifact('/workflow/outputs/1_h2o_SHAP_Summary.png')
+    mlflow.log_artifact('/workflow/outputs/h2o_SHAP_Summary.png')
     mlflow.log_artifact(aml_path)
 
     # Top Model
