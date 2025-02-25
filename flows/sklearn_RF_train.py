@@ -204,7 +204,7 @@ with mlflow.start_run(run_name=run_name) as run:
             # Model Parameters
             mlflow.log_param("max_depth", max_depth)
             mlflow.log_param("min_samples_leaf", min_samples_leaf)
-            mlflow.log_param("n_estimators", n_estimators)
+            mlflow.log_param("n_estimators", num_estimator_value)
             mlflow.log_param("model_type", "sklearn")
 
             # Model Metrics
