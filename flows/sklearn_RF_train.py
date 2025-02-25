@@ -182,7 +182,7 @@ with mlflow.start_run(run_name=run_name) as run:
             
             rf = RandomForestClassifier(max_depth=max_depth,
                                         min_samples_leaf=min_samples_leaf,
-                                        n_estimators=n_estimators)
+                                        n_estimators=num_estimator_value)
             
             rf.fit(X_train, y_train)
             
