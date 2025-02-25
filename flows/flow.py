@@ -23,8 +23,13 @@ snapshot_number=1
 
 # Define Flow Artifacts to capture for each model training task
 sklearn_log_regArtifact = Artifact("scikit-learn Logistic Regression", MODEL)
+sklearn_log_regArtifact_charts = Artifact("scikit-learn Logistic Regression Charts", REPORT)
+
 h2oArtifact = Artifact("H20 AutoML", MODEL)
+h2oArtifact_charts = Artifact("H20 AutoML Charts", REPORT)
+
 sklearn_rfArtifact = Artifact("scikit-learn Random Forest", MODEL)
+
 xgboostArtifact = Artifact("XGBoost", MODEL)
 
 
@@ -46,7 +51,9 @@ def model_training_flow(data_path: str):
         hardware_tier_name=hardware_tier_name,
         dataset_snapshots=[
             DatasetSnapshot(Name=dataset_name, Version=snapshot_number)
-        ]
+        ],
+        cache=True,
+        cache_version="1.0"
     )
 
     # Launch sklearn logistic regression training
@@ -55,13 +62,13 @@ def model_training_flow(data_path: str):
         command="flows/sklearn_log_reg_train.py",
         inputs=[Input(name='credit_card_default', type=FlyteFile[TypeVar('csv')], value=load_data['credit_card_default'])],
         output_specs=[Output(name="model", type=sklearn_log_regArtifact.File(name="model.pkl")),
-                      Output(name="log_reg_ROC_Curve_C", type=FlyteFile[TypeVar('png')]),
-                      Output(name="log_reg_confusion_matrix_C", type=FlyteFile[TypeVar('png')]),
-                      Output(name="log_reg_precision_recall_C", type=FlyteFile[TypeVar('png')]),
-                      Output(name="log_reg_ROC_Curve", type=FlyteFile[TypeVar('png')]),
-                      Output(name="log_reg_confusion_matrix", type=FlyteFile[TypeVar('png')]),
-                      Output(name="log_reg_precision_recall", type=FlyteFile[TypeVar('png')]),
-                      Output(name="log_reg_confusion_matrix", type=FlyteFile[TypeVar('png')])],
+                      Output(name="log_reg_ROC_Curve_C", type=sklearn_log_regArtifact_charts.File(name="log_reg_ROC_Curve_C.png")),
+                      Output(name="log_reg_confusion_matrix_C", type=sklearn_log_regArtifact_charts.File(name="log_reg_confusion_matrix_C.png")),
+                      Output(name="log_reg_precision_recall_C", type=sklearn_log_regArtifact_charts.File(name="log_reg_precision_recall_C.png")),
+                      Output(name="log_reg_ROC_Curve", type=sklearn_log_regArtifact_charts.File(name="log_reg_ROC_Curve.png")),
+                      Output(name="log_reg_confusion_matrix", type=sklearn_log_regArtifact_charts.File(name="log_reg_confusion_matrix.png")),
+                      Output(name="log_reg_precision_recall", type=sklearn_log_regArtifact_charts.File(name="log_reg_precision_recall.png")),
+                      Output(name="log_reg_confusion_matrix", type=sklearn_log_regArtifact_charts.File(name="log_reg_confusion_matrix.png"))],
         use_project_defaults_for_omitted=True,
         environment_name=environment_name,
         hardware_tier_name=hardware_tier_name
@@ -72,7 +79,10 @@ def model_training_flow(data_path: str):
         flyte_task_name="Train H2O Model",
         command="flows/h2o_model_train.py",
         inputs=[Input(name='credit_card_default', type=FlyteFile[TypeVar('csv')], value=load_data['credit_card_default'])],
-        output_specs=[Output(name="model", type=h2oArtifact.File(name="model.pkl"))],
+        output_specs=[Output(name="model", type=h2oArtifact.File(name="model.pkl")),
+                      Output(name="h2o_PI_plot", type=h2oArtifact_charts.File(name="h2o_PI_plot.png")),
+                      Output(name="1_h2o_SHAP_Summary", type=h2oArtifact_charts.File(name="1_h2o_SHAP_Summary.png"))
+                      ],
         use_project_defaults_for_omitted=True,
         environment_name=environment_name,
         hardware_tier_name=hardware_tier_name,

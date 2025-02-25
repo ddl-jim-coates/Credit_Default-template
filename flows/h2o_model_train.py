@@ -96,11 +96,11 @@ print('Creating visualizations...')
 
 # Permutation Importance Plot
 PI_plot = best_model.permutation_importance_plot(hTest).figure()
-PI_plot.savefig('/mnt/artifacts/h2o_PI_plot.png')
+PI_plot.savefig('/workflow/outputs/h2o_PI_plot.png')
 
 # SHAP Summary Plot
 shap_plot = best_model.shap_summary_plot(hTest).figure()
-shap_plot.savefig('/mnt/artifacts/1_h2o_SHAP_Summary.png')
+shap_plot.savefig('/workflow/outputs/1_h2o_SHAP_Summary.png')
 
 #Saving trained model to serialized pickle object 
 aml_path = h2o.save_model(best_model, path ='/mnt/code/models')
@@ -146,8 +146,8 @@ with mlflow.start_run(run_name=run_name) as run:
     mlflow.log_metric("recall_score", recall_score)
 
     # Top Model Artifacts
-    mlflow.log_artifact('/mnt/artifacts/h2o_PI_plot.png')
-    mlflow.log_artifact('/mnt/artifacts/1_h2o_SHAP_Summary.png')
+    mlflow.log_artifact('/workflow/outputs/h2o_PI_plot.png')
+    mlflow.log_artifact('/workflow/outputs/1_h2o_SHAP_Summary.png')
     mlflow.log_artifact(aml_path)
 
     # Top Model
