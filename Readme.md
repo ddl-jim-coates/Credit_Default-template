@@ -4,7 +4,7 @@ This template is to be used as the starting point for all credit scoring and cre
 - Approved Domino Data Sources for Credit scoring
 - Model Development Tasks/Goals
 - Project file structure
-- Sample Notebooks, Training, and Application Scripts.
+- Sample Notebooks, Training, and Application Scripts...
 - Recommended Hardware Tier
 - Starting Tags
 
