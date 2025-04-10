@@ -7,6 +7,7 @@ This template is to be used as the starting point for all credit scoring and cre
 - Sample Notebooks, Training, and Application Scripts...
 - Recommended Hardware Tier
 - Starting Tags
+- test
 
 ## Project File Structure Structure
 Use the Project Template directory structure to organize files for this project.
